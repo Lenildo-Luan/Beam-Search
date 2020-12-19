@@ -1,22 +1,12 @@
 #include "readData.h"
-#include "CustoIn.h"
-#include <fstream>
 #include <iostream>
 #include <vector>
-#include <ctime>
 #include <algorithm>
-#include <cmath>
 #include <limits>
-#include <random>
-#include "infoSeq.h"
-#include <sys/timeb.h>
-#include <sys/resource.h>
-#include <fstream>
 #include <tuple>
 
 using namespace std;
 
-ofstream out("arquivo.txt");
 double ** mJobs; // matriz de adjacencia
 double ** mSetupTimes; // matriz reorganizada;
 int n; // quantidade total de vertices
@@ -43,8 +33,6 @@ int main(int argc, char** argv) {
     beamSearch(bestSol, 5, 500);
     printSolution(bestSol.first, mJobs, mSetupTimes);
 
-    out.close();
-
     return 0;
 }
 
@@ -64,8 +52,6 @@ void beamSearch(pair< vector<int>, double> &bestSol, int totalBranchesPerNode, i
     listOfSols.push_back(sol);                                                  
 
     for (int i = 0; i < n; i++){
-        cout << "Nivel: " << i << endl;
-
         //Limpa a lista de nós por nível para nova análise
         levelListOfSols.clear();
 
@@ -110,7 +96,6 @@ void beamSearch(pair< vector<int>, double> &bestSol, int totalBranchesPerNode, i
             if(j == totalBranchesPerLevel) break;
         }
 
-        cout << "Best: " << get<0>(listOfSols[0]).second << endl << endl;
     }
 
     //Obtem melhor solução ao final do algorítimo
@@ -234,18 +219,12 @@ void printSolution(vector<int> solucao, double **mJobs, double ** mSetupTimes){
         cout << solucao[i] << " ";
     }
     cout << " ]" << endl;
-    /*for(int i = 0; i < n; i++){
-        cout << mJobs[solucao[i]][1] << " ";
-    }*/
 
     double cTime = mSetupTimes[0][solucao[0]] + mJobs[solucao[0]][2] + mJobs[solucao[0]][1];
     double totalWT = mJobs[solucao[0]][1];
-    /*for(int i = 0; i < s.size(); i++){
-        cout << s[i] << " ";
-    }*/
+
     cout << totalWT;
     for(int i = 0, j = 1; j < solucao.size(); i++ ,j++){
-        //cout<< i << " " << j << endl;
         if(cTime >= mJobs[solucao[j]][1]){
             cTime += mSetupTimes[solucao[i]][solucao[j]] + mJobs[solucao[j]][2];
             cout << " " << 0;
